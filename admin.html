@@ -326,23 +326,37 @@
       <h2>&#128214; Current book</h2>
 
       <div class="form-group">
-        <label>Book title</label>
+        <label>Google Books ID</label>
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <input type="text" id="f-gbid" placeholder="e.g. O6H3DwAAQBAJ" style="flex:1;" />
+          <button onclick="lookupBook()" id="lookup-btn" style="background:var(--ink);color:var(--cream);border:none;padding:10px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0;">Look up &#8594;</button>
+        </div>
+        <small style="display:block;font-size:12px;color:#8a7060;margin-top:6px;">Go to <a href="https://books.google.com" target="_blank" style="color:#a0673a;">books.google.com</a>, search your book, open it, and copy the value after <code style="background:#f6e4c3;padding:1px 5px;border-radius:3px;font-size:11px;">id=</code> in the URL.</small>
+      </div>
+
+      <div id="lookup-status" style="font-size:13px;min-height:18px;margin-bottom:0.5rem;"></div>
+
+      <div id="book-preview" style="display:none;background:var(--gold-light);border-radius:10px;padding:1rem;margin-bottom:1rem;display:none;align-items:center;gap:1rem;">
+        <img id="preview-cover" src="" alt="Cover" style="width:52px;height:76px;object-fit:cover;border-radius:3px;box-shadow:3px 3px 10px rgba(30,18,8,0.15);" />
+        <div>
+          <div id="preview-title" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;"></div>
+          <div id="preview-author" style="font-size:13px;color:var(--ink-muted);font-style:italic;"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Book title <span style="font-weight:400;opacity:0.6;">(auto-filled)</span></label>
         <input type="text" id="f-title" placeholder="e.g. The Midnight Library" />
       </div>
 
       <div class="form-group">
-        <label>Author</label>
+        <label>Author <span style="font-weight:400;opacity:0.6;">(auto-filled)</span></label>
         <input type="text" id="f-author" placeholder="e.g. Matt Haig" />
       </div>
 
       <div class="form-group">
         <label>Next meeting date</label>
         <input type="text" id="f-meeting" placeholder="e.g. May 24th" />
-      </div>
-      <div class="form-group">
-        <label>Google Books ID</label>
-        <input type="text" id="f-gbid" placeholder="e.g. O6H3DwAAQBAJ" />
-        <small style="display:block;font-size:12px;color:#8a7060;margin-top:5px;">Search your book on <a href="https://books.google.com" target="_blank" style="color:#a0673a;">books.google.com</a>, open the book page, and copy the value after <code style="background:#f6e4c3;padding:1px 5px;border-radius:3px;font-size:11px;">id=</code> in the URL.</small>
       </div>
     </div>
 
@@ -422,6 +436,61 @@
       var val = document.getElementById('f-progress').value;
       document.getElementById('pct-display').textContent      = val + '%';
       document.getElementById('preview-fill').style.width     = val + '%';
+    }
+
+    function lookupBook() {
+      var id = document.getElementById('f-gbid').value.trim();
+      if (!id) {
+        setLookupStatus('Please enter a Google Books ID first.', 'error');
+        return;
+      }
+      var btn = document.getElementById('lookup-btn');
+      btn.textContent = 'Looking up...';
+      btn.disabled = true;
+      setLookupStatus('', '');
+
+      fetch('https://www.googleapis.com/books/v1/volumes/' + id)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          btn.textContent = 'Look up →';
+          btn.disabled = false;
+
+          if (!data || !data.volumeInfo) {
+            setLookupStatus('Book not found. Check the ID and try again.', 'error');
+            return;
+          }
+
+          var info   = data.volumeInfo;
+          var title  = info.title || '';
+          var author = info.authors ? info.authors.join(', ') : '';
+          var imgId  = id;
+
+          document.getElementById('f-title').value  = title;
+          document.getElementById('f-author').value = author;
+
+          var preview     = document.getElementById('book-preview');
+          var prevCover   = document.getElementById('preview-cover');
+          var prevTitle   = document.getElementById('preview-title');
+          var prevAuthor  = document.getElementById('preview-author');
+
+          prevCover.src       = 'https://books.google.com/books/content?id=' + imgId + '&printsec=frontcover&img=1&zoom=2';
+          prevTitle.textContent  = title;
+          prevAuthor.textContent = author;
+          preview.style.display  = 'flex';
+
+          setLookupStatus('✓ Found! Title and author filled in.', 'ok');
+        })
+        .catch(function() {
+          btn.textContent = 'Look up →';
+          btn.disabled = false;
+          setLookupStatus('Could not reach Google Books. Check your connection.', 'error');
+        });
+    }
+
+    function setLookupStatus(msg, type) {
+      var el = document.getElementById('lookup-status');
+      el.textContent = msg;
+      el.style.color = type === 'error' ? 'var(--red)' : type === 'ok' ? 'var(--green)' : 'var(--ink-muted)';
     }
 
     function saveData() {

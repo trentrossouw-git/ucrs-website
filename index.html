@@ -5,96 +5,208 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Reading Society</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>&#9733; Monthly meetings</span>
+      <span>&#9670; New members welcome</span>
+      <span>&#9733; Cosy reads all year round</span>
+      <span>&#9670; Free to join</span>
+      <span>&#9733; Monthly meetings</span>
+      <span>&#9670; New members welcome</span>
+      <span>&#9733; Cosy reads all year round</span>
+      <span>&#9670; Free to join</span>
+    </div>
+  </div>
+
+  <!-- Nav -->
   <nav>
-    <span class="logo">&#9998; The Reading Society</span>
+    <a href="index.html" class="logo">
+      <span class="logo-word">the</span>
+      <span class="logo-main">Reading Society</span>
+    </a>
     <ul class="nav-links">
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="reviews.html">Reviews</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
+    <a href="contact.html" class="nav-cta">Join us</a>
   </nav>
 
-  <header class="hero">
-    <span class="hero-tag">A community for readers</span>
-    <h1>Gather around<br>a good <em>book</em></h1>
-    <p>A warm corner of the internet for our reading club — reviews, recommendations, and meeting notes.</p>
-    <div class="hero-buttons">
-      <a href="reviews.html" class="btn-primary">Latest reviews</a>
-      <a href="contact.html" class="btn-outline">Join us</a>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">May 2026 pick</p>
+      <h1>A book for<br><em>every chapter</em><br>of life.</h1>
+      <p class="hero-sub">A warm little corner of the internet where we read, discuss, and occasionally eat too many biscuits together.</p>
+      <div class="hero-actions">
+        <a href="reviews.html" class="btn-dark">See our reviews</a>
+        <a href="contact.html" class="btn-ghost">Join the club &rarr;</a>
+      </div>
     </div>
-  </header>
-
-  <main>
-
-    <section class="section">
-      <div class="section-label">Currently reading</div>
-      <h2>This month's pick</h2>
-      <div class="current-read">
-        <div class="book-spine">&#128214;</div>
-        <div class="book-info">
-          <span class="badge">May 2026</span>
-          <h3>The Midnight Library</h3>
-          <p class="author">Matt Haig</p>
-          <p>A dazzling novel about all the lives we could have lived — our next meeting is on the 24th at the usual spot. Come ready to discuss!</p>
+    <div class="hero-book">
+      <div class="book-cover">
+        <div class="book-cover-inner">
+          <p class="cover-label">Currently reading</p>
+          <h2>The Midnight Library</h2>
+          <p class="cover-author">Matt Haig</p>
+          <div class="cover-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
         </div>
       </div>
-    </section>
+      <div class="hero-pill">Next meeting: May 24th</div>
+    </div>
+  </section>
 
-    <hr class="divider" />
-
-    <section class="section">
-      <div class="section-label">From the shelf</div>
-      <h2>Recent reads</h2>
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="book-title">Demon Copperhead</div>
-          <div class="reviewer">reviewed by Sarah</div>
-          <p>Devastating and beautiful. Kingsolver at her very best — a modern retelling that earns every page.</p>
-          <a href="reviews.html" class="read-more">Read full review &rarr;</a>
-        </div>
-        <div class="review-card">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="book-title">Intermezzo</div>
-          <div class="reviewer">reviewed by Tom</div>
-          <p>Slow to start but utterly absorbing by the halfway point. Sally Rooney exploring new emotional territory.</p>
-          <a href="reviews.html" class="read-more">Read full review &rarr;</a>
-        </div>
-        <div class="review-card">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="book-title">James</div>
-          <div class="reviewer">reviewed by Priya</div>
-          <p>Percival Everett's retelling of Huckleberry Finn is a masterpiece of perspective and quiet fury.</p>
-          <a href="reviews.html" class="read-more">Read full review &rarr;</a>
-        </div>
-        <div class="review-card">
-          <div class="stars">&#9733;&#9733;&#9733;</div>
-          <div class="book-title">The Women</div>
-          <div class="reviewer">reviewed by Marcus</div>
-          <p>Ambitious scope, though the pacing stumbles in the middle. Worth it for the final third alone.</p>
-          <a href="reviews.html" class="read-more">Read full review &rarr;</a>
-        </div>
-      </div>
-      <div style="text-align:center; margin-top: 1.5rem;">
-        <a href="reviews.html" class="btn-secondary">All reviews &rarr;</a>
-      </div>
-    </section>
-
-  </main>
-
-  <div class="contact-strip">
-    <h2>Want to join the club?</h2>
-    <p>We meet monthly and welcome new members. Get in touch — a cup of tea is always on.</p>
-    <a href="contact.html" class="btn-primary">Say hello</a>
+  <!-- Feature strip -->
+  <div class="feature-strip">
+    <div class="feature-item">
+      <span class="feature-icon">&#128366;</span>
+      <span>One book a month</span>
+    </div>
+    <div class="feature-divider"></div>
+    <div class="feature-item">
+      <span class="feature-icon">&#9749;</span>
+      <span>Tea & discussion</span>
+    </div>
+    <div class="feature-divider"></div>
+    <div class="feature-item">
+      <span class="feature-icon">&#128101;</span>
+      <span>Open to everyone</span>
+    </div>
+    <div class="feature-divider"></div>
+    <div class="feature-item">
+      <span class="feature-icon">&#127775;</span>
+      <span>Member reviews</span>
+    </div>
   </div>
 
+  <!-- Recent reads -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">From the shelf</p>
+        <h2 class="section-title">Recent reads</h2>
+      </div>
+      <a href="reviews.html" class="link-arrow">All reviews &rarr;</a>
+    </div>
+
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-card-img gold">
+          <span class="card-badge">Best of 2025</span>
+          <div class="card-book-title">Demon<br>Copperhead</div>
+        </div>
+        <div class="book-card-body">
+          <div class="card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <h3>Demon Copperhead</h3>
+          <p class="card-author">Barbara Kingsolver</p>
+          <p class="card-excerpt">Devastating and beautiful. Kingsolver at her very best — a modern retelling that earns every page.</p>
+          <div class="card-footer">
+            <span class="card-reviewer">Sarah</span>
+            <a href="reviews.html" class="card-link">Read review &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-card-img blue">
+          <div class="card-book-title">Intermezzo</div>
+        </div>
+        <div class="book-card-body">
+          <div class="card-stars">&#9733;&#9733;&#9733;&#9733;</div>
+          <h3>Intermezzo</h3>
+          <p class="card-author">Sally Rooney</p>
+          <p class="card-excerpt">Slow to start but utterly absorbing by the halfway point. Rooney exploring new emotional territory.</p>
+          <div class="card-footer">
+            <span class="card-reviewer">Tom</span>
+            <a href="reviews.html" class="card-link">Read review &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-card-img warm">
+          <span class="card-badge">Pulitzer</span>
+          <div class="card-book-title">James</div>
+        </div>
+        <div class="book-card-body">
+          <div class="card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <h3>James</h3>
+          <p class="card-author">Percival Everett</p>
+          <p class="card-excerpt">A masterpiece of perspective and quiet fury. One of the best books we've ever discussed together.</p>
+          <div class="card-footer">
+            <span class="card-reviewer">Priya</span>
+            <a href="reviews.html" class="card-link">Read review &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-card-img sage">
+          <div class="card-book-title">The Women</div>
+        </div>
+        <div class="book-card-body">
+          <div class="card-stars">&#9733;&#9733;&#9733;</div>
+          <h3>The Women</h3>
+          <p class="card-author">Kristin Hannah</p>
+          <p class="card-excerpt">Ambitious scope, pacing stumbles midway — but the final third alone makes it worth it.</p>
+          <div class="card-footer">
+            <span class="card-reviewer">Marcus</span>
+            <a href="reviews.html" class="card-link">Read review &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial-section">
+    <div class="testimonial-inner">
+      <div class="testimonial-text">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>
+          "I joined not knowing a soul — within two meetings it felt like I'd known everyone for years. The books are wonderful but honestly, it's the people."
+        </blockquote>
+        <p class="testimonial-author">&mdash; Amelia, member since 2024</p>
+        <a href="contact.html" class="link-arrow warm">+ Join the club</a>
+      </div>
+      <div class="testimonial-image">
+        <div class="image-placeholder">
+          <span>&#128218;</span>
+          <p>Photo of the group</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join CTA -->
+  <section class="cta-section">
+    <p class="eyebrow">Don't be shy</p>
+    <h2>Ready to find your<br><em>next great read?</em></h2>
+    <p>New members always welcome. Get in touch — the kettle is always on.</p>
+    <a href="contact.html" class="btn-dark">Say hello</a>
+  </section>
+
   <footer>
-    <p>&copy; 2026 The Reading Society &middot; <a href="index.html">Home</a> &middot; <a href="reviews.html">Reviews</a> &middot; <a href="contact.html">Contact</a></p>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-word">the</span>
+        <span class="logo-main">Reading Society</span>
+      </div>
+      <nav class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 The Reading Society</p>
+    </div>
   </footer>
 
 </body>

@@ -5,78 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact — The Reading Society</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>&#9733; New members always welcome</span>
+      <span>&#9670; The kettle is always on</span>
+      <span>&#9733; Monthly meetings</span>
+      <span>&#9670; Say hello, we don't bite</span>
+      <span>&#9733; New members always welcome</span>
+      <span>&#9670; The kettle is always on</span>
+      <span>&#9733; Monthly meetings</span>
+      <span>&#9670; Say hello, we don't bite</span>
+    </div>
+  </div>
+
   <nav>
-    <span class="logo">&#9998; The Reading Society</span>
+    <a href="index.html" class="logo">
+      <span class="logo-word">the</span>
+      <span class="logo-main">Reading Society</span>
+    </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="reviews.html">Reviews</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
     </ul>
+    <a href="contact.html" class="nav-cta">Join us</a>
   </nav>
 
   <header class="page-header">
-    <span class="hero-tag">We'd love to hear from you</span>
+    <p class="eyebrow">Pull up a chair</p>
     <h1>Get in <em>touch</em></h1>
-    <p>Questions, book recommendations, or just want to join? Pull up a chair.</p>
+    <p class="page-header-sub">Questions, recommendations, or just want to say hello? We'd love to hear from you.</p>
   </header>
 
-  <main>
-    <section class="section narrow">
+  <main class="contact-page">
 
-      <div class="info-cards">
-        <div class="info-card">
-          <div class="info-icon">&#128197;</div>
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <div class="info-block">
+          <p class="info-icon">&#128197;</p>
           <h3>Monthly meetings</h3>
-          <p>We meet on the last Saturday of each month. New members always welcome.</p>
+          <p>Last Saturday of each month. Location announced via email to members a week before.</p>
         </div>
-        <div class="info-card">
-          <div class="info-icon">&#128233;</div>
-          <h3>Email us</h3>
-          <p>hello@readingsociety.com — we try to reply within a day or two.</p>
+        <div class="info-block">
+          <p class="info-icon">&#128233;</p>
+          <h3>Email</h3>
+          <p>hello@readingsociety.com<br>We reply within a day or two.</p>
+        </div>
+        <div class="info-block">
+          <p class="info-icon">&#128218;</p>
+          <h3>What to expect</h3>
+          <p>A relaxed evening, a great book, good people, and plenty of hot drinks. No prior experience required.</p>
         </div>
       </div>
 
-      <div class="form-card">
+      <div class="contact-form-wrap">
         <h2>Send a message</h2>
-        <p class="form-intro">Use the form below and we'll get back to you soon.</p>
-
         <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-          <div class="form-row">
+          <div class="form-row-two">
             <div class="form-group">
-              <label for="name">Your name</label>
-              <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
             </div>
             <div class="form-group">
-              <label for="email">Email address</label>
-              <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required />
             </div>
           </div>
           <div class="form-group">
             <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="I'd like to join the club" />
+            <input type="text" id="subject" name="subject" placeholder="I'd love to join!" />
           </div>
           <div class="form-group">
             <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" placeholder="Tell us a bit about yourself and what you've been reading lately..."></textarea>
+            <textarea id="message" name="message" rows="5" placeholder="Tell us a bit about yourself and what you've been reading..."></textarea>
           </div>
-          <button type="submit" class="btn-primary full-width">Send message</button>
+          <button type="submit" class="btn-dark full">Send message</button>
         </form>
-
-        <p class="form-note">
-          Note: the form uses <a href="https://formspree.io" target="_blank">Formspree</a> — replace <code>YOUR_FORM_ID</code> in the HTML with your free Formspree ID to make it work.
-        </p>
+        <p class="form-note">This form uses <a href="https://formspree.io" target="_blank">Formspree</a> — replace <code>YOUR_FORM_ID</code> in the HTML with your free Formspree ID.</p>
       </div>
 
-    </section>
+    </div>
+
   </main>
 
   <footer>
-    <p>&copy; 2026 The Reading Society &middot; <a href="index.html">Home</a> &middot; <a href="reviews.html">Reviews</a> &middot; <a href="contact.html">Contact</a></p>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-word">the</span>
+        <span class="logo-main">Reading Society</span>
+      </div>
+      <nav class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 The Reading Society</p>
+    </div>
   </footer>
 
 </body>

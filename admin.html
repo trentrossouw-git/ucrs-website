@@ -323,6 +323,34 @@
     </div>
 
     <div class="panel">
+      <h2>&#128444; Logo</h2>
+
+      <div id="logo-current" style="margin-bottom:1rem;display:none;">
+        <p style="font-size:12px;color:var(--ink-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-weight:500;">Current logo</p>
+        <div style="background:var(--ink);display:inline-flex;padding:10px 16px;border-radius:8px;align-items:center;gap:12px;">
+          <img id="logo-preview-img" src="" style="height:36px;width:auto;object-fit:contain;" />
+          <button onclick="removeLogo()" style="background:none;border:1px solid rgba(253,248,242,0.3);color:rgba(253,248,242,0.7);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">Remove</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Upload logo image</label>
+        <input type="file" id="f-logo" accept="image/*" onchange="previewLogo(event)" style="padding:8px;" />
+        <small style="display:block;font-size:12px;color:#8a7060;margin-top:6px;">PNG with transparent background works best. Will display at 40px tall in the navbar.</small>
+      </div>
+
+      <div id="logo-new-preview" style="display:none;margin-top:0.5rem;">
+        <p style="font-size:12px;color:var(--ink-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-weight:500;">Preview on dark nav</p>
+        <div style="background:var(--ink);display:inline-flex;padding:10px 16px;border-radius:8px;">
+          <img id="logo-new-img" src="" style="height:36px;width:auto;object-fit:contain;" />
+        </div>
+      </div>
+
+      <button onclick="saveLogo()" class="save-btn" style="margin-top:1rem;">Save logo</button>
+      <div id="logo-save-status" style="text-align:center;font-size:13px;margin-top:0.5rem;min-height:18px;color:var(--green);font-weight:500;"></div>
+    </div>
+
+    <div class="panel">
       <h2>&#128214; Current book</h2>
 
       <div class="form-group">
@@ -398,6 +426,7 @@
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display  = 'block';
         loadFields();
+        loadLogo();
       } else {
         document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
         document.getElementById('password-input').value = '';
@@ -436,6 +465,64 @@
       var val = document.getElementById('f-progress').value;
       document.getElementById('pct-display').textContent      = val + '%';
       document.getElementById('preview-fill').style.width     = val + '%';
+    }
+
+    function loadLogo() {
+      var stored = localStorage.getItem('rs_logo');
+      if (!stored) return;
+      var cur = document.getElementById('logo-current');
+      var img = document.getElementById('logo-preview-img');
+      cur.style.display = 'block';
+      img.src = stored;
+    }
+
+    function previewLogo(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var wrap = document.getElementById('logo-new-preview');
+        var img  = document.getElementById('logo-new-img');
+        img.src = ev.target.result;
+        wrap.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveLogo() {
+      var file = document.getElementById('f-logo').files[0];
+      if (!file) {
+        var st = document.getElementById('logo-save-status');
+        st.style.color = 'var(--red)';
+        st.textContent = 'Please choose an image first.';
+        setTimeout(function() { st.textContent = ''; }, 3000);
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        localStorage.setItem('rs_logo', ev.target.result);
+        var cur = document.getElementById('logo-current');
+        var img = document.getElementById('logo-preview-img');
+        img.src = ev.target.result;
+        cur.style.display = 'block';
+        var st = document.getElementById('logo-save-status');
+        st.style.color = 'var(--green)';
+        st.textContent = '✓ Logo saved! It will appear in the navbar across all pages.';
+        setTimeout(function() { st.textContent = ''; }, 4000);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogo() {
+      localStorage.removeItem('rs_logo');
+      document.getElementById('logo-current').style.display = 'none';
+      document.getElementById('logo-preview-img').src = '';
+      document.getElementById('logo-new-preview').style.display = 'none';
+      document.getElementById('f-logo').value = '';
+      var st = document.getElementById('logo-save-status');
+      st.style.color = 'var(--ink-muted)';
+      st.textContent = 'Logo removed. Text logo restored.';
+      setTimeout(function() { st.textContent = ''; }, 3000);
     }
 
     function lookupBook() {

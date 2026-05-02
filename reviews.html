@@ -24,9 +24,12 @@
   </div>
 
   <nav>
-    <a href="index.html" class="logo">
-      <span class="logo-word">the</span>
-      <span class="logo-main">Reading Society</span>
+    <a href="index.html" class="logo" id="nav-logo">
+      <img id="nav-logo-img" src="" alt="The Reading Society" style="display:none;height:40px;width:auto;object-fit:contain;" />
+      <span id="nav-logo-text">
+        <span class="logo-word">the</span>
+        <span class="logo-main">Reading Society</span>
+      </span>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -142,6 +145,15 @@
     </div>
   </footer>
 
+  <script>
+    (function() {
+      var logoData = localStorage.getItem('rs_logo');
+      if (!logoData) return;
+      var img = document.getElementById('nav-logo-img');
+      var txt = document.getElementById('nav-logo-text');
+      if (img && txt) { img.src = logoData; img.style.display = 'block'; txt.style.display = 'none'; }
+    })();
+  </script>
   <script src="transitions.js"></script>
 </body>
 </html>

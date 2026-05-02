@@ -53,14 +53,46 @@
       <div class="book-cover">
         <div class="book-cover-inner">
           <p class="cover-label">Currently reading</p>
-          <h2>The Midnight Library</h2>
-          <p class="cover-author">Matt Haig</p>
+          <h2 id="hero-book-title">The Midnight Library</h2>
+          <p class="cover-author" id="hero-book-author">Matt Haig</p>
           <div class="cover-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
         </div>
       </div>
-      <div class="hero-pill">Next meeting: May 24th</div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-label">Our progress</span>
+          <span class="progress-pct" id="progress-pct">65%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width: 65%"></div>
+        </div>
+        <p class="progress-sub" id="progress-sub">Roughly two thirds through — things are getting interesting.</p>
+      </div>
+
+      <div class="hero-pill" id="hero-meeting">Next meeting: May 24th</div>
     </div>
   </section>
+
+  <script src="transitions.js"></script>
+  <script>
+    (function() {
+      var data = localStorage.getItem('rs_book_data');
+      if (!data) return;
+      try {
+        var d = JSON.parse(data);
+        if (d.title)    document.getElementById('hero-book-title').textContent  = d.title;
+        if (d.author)   document.getElementById('hero-book-author').textContent = d.author;
+        if (d.meeting)  document.getElementById('hero-meeting').textContent     = 'Next meeting: ' + d.meeting;
+        if (d.progress !== undefined) {
+          var pct = Math.min(100, Math.max(0, d.progress));
+          document.getElementById('progress-pct').textContent    = pct + '%';
+          document.getElementById('progress-fill').style.width   = pct + '%';
+        }
+        if (d.note) document.getElementById('progress-sub').textContent = d.note;
+      } catch(e) {}
+    })();
+  </script>
 
   <!-- Feature strip -->
   <div class="feature-strip">

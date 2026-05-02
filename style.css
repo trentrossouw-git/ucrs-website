@@ -253,6 +253,83 @@ nav {
   line-height: 1.5;
 }
 
+.book-cover-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cover-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  opacity: 0.7;
+}
+
+.book-img-frame {
+  width: 160px;
+  height: 240px;
+  border-radius: 3px 8px 8px 3px;
+  overflow: hidden;
+  box-shadow: 6px 6px 24px rgba(30,18,8,0.22), -2px 0 0 rgba(30,18,8,0.1);
+  position: relative;
+  background: var(--gold);
+}
+
+.book-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.book-img-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  gap: 0.4rem;
+}
+
+.book-img-fallback span:first-child {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.book-img-fallback span:last-child {
+  font-size: 12px;
+  color: var(--ink-mid);
+  font-style: italic;
+}
+
+.cover-title-below {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.25;
+  max-width: 160px;
+}
+
+.cover-author-below {
+  font-size: 13px;
+  color: var(--ink-muted);
+  font-style: italic;
+  text-align: center;
+}
+
 .book-cover {
   width: 200px;
   height: 280px;
@@ -908,24 +985,6 @@ footer {
 .footer-copy {
   font-size: 12px;
   color: rgba(253,248,242,0.35);
-}
-
-/* ── Page transitions ── */
-
-body {
-  opacity: 0;
-  animation: pageFadeIn 0.4s ease forwards;
-}
-
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-body.fade-out {
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 /* ── Back to top button ── */

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — The Reading Society</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #eac176;
+      --gold-light: #f6e4c3;
+      --blue:       #c3d5f6;
+      --cream:      #fdf8f2;
+      --paper:      #faf5ed;
+      --ink:        #1e1208;
+      --ink-mid:    #4a3520;
+      --ink-muted:  #8a7060;
+      --border:     rgba(30,18,8,0.1);
+      --green:      #4a7c59;
+      --red:        #9b3a2a;
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* ── Login screen ── */
+    #login-screen {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    #login-screen .logo-word {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+    }
+
+    #login-screen .logo-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    #login-screen .admin-tag {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: var(--gold-light);
+      padding: 3px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    #login-screen input {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    #login-screen input:focus { outline: none; border-color: var(--gold); }
+
+    #login-error {
+      font-size: 13px;
+      color: var(--red);
+      margin-bottom: 0.75rem;
+      min-height: 20px;
+    }
+
+    /* ── Admin panel ── */
+    #admin-panel { display: none; width: 100%; max-width: 560px; }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .admin-logo .logo-word {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+    }
+
+    .admin-logo .logo-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .admin-tag {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: var(--gold-light);
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 10px 14px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { outline: none; border-color: var(--gold); }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .progress-row input[type="range"] {
+      flex: 1;
+      padding: 0;
+      border: none;
+      background: none;
+      accent-color: var(--ink);
+      cursor: pointer;
+    }
+
+    .progress-row .pct-display {
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      color: var(--ink);
+      min-width: 52px;
+      text-align: right;
+    }
+
+    .progress-preview {
+      margin-top: 1rem;
+      background: var(--gold-light);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .progress-preview-track {
+      height: 8px;
+      background: rgba(30,18,8,0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-preview-fill {
+      height: 100%;
+      background: var(--ink);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .save-btn {
+      width: 100%;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      padding: 13px;
+      border-radius: 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .save-btn:hover { background: var(--ink-mid); }
+
+    #save-status {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 0.75rem;
+      min-height: 20px;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+    .visit-link {
+      display: block;
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 13px;
+      color: var(--ink-muted);
+      text-decoration: none;
+    }
+
+    .visit-link:hover { color: var(--ink); text-decoration: underline; }
+
+    /* reuse login btn style */
+    .login-btn {
+      width: 100%;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      padding: 13px;
+      border-radius: 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover { background: var(--ink-mid); }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <div id="login-screen">
+    <span class="logo-word">the</span>
+    <span class="logo-main">Reading Society</span>
+    <span class="admin-tag">Admin panel</span>
+
+    <input type="password" id="password-input" placeholder="Enter password" />
+    <div id="login-error"></div>
+    <button class="login-btn" onclick="tryLogin()">Sign in</button>
+  </div>
+
+  <!-- Admin panel -->
+  <div id="admin-panel">
+
+    <div class="admin-header">
+      <div class="admin-logo">
+        <span class="logo-word">the</span>
+        <span class="logo-main">Reading Society</span>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:center;">
+        <span class="admin-tag">Admin</span>
+        <button class="logout-btn" onclick="logout()">Sign out</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>&#128214; Current book</h2>
+
+      <div class="form-group">
+        <label>Book title</label>
+        <input type="text" id="f-title" placeholder="e.g. The Midnight Library" />
+      </div>
+
+      <div class="form-group">
+        <label>Author</label>
+        <input type="text" id="f-author" placeholder="e.g. Matt Haig" />
+      </div>
+
+      <div class="form-group">
+        <label>Next meeting date</label>
+        <input type="text" id="f-meeting" placeholder="e.g. May 24th" />
+      </div>
+      <div class="form-group">
+        <label>Google Books ID</label>
+        <input type="text" id="f-gbid" placeholder="e.g. O6H3DwAAQBAJ" />
+        <small style="display:block;font-size:12px;color:#8a7060;margin-top:5px;">Search your book on <a href="https://books.google.com" target="_blank" style="color:#a0673a;">books.google.com</a>, open the book page, and copy the value after <code style="background:#f6e4c3;padding:1px 5px;border-radius:3px;font-size:11px;">id=</code> in the URL.</small>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>&#128200; Reading progress</h2>
+
+      <div class="form-group">
+        <label>How far through are you?</label>
+        <div class="progress-row">
+          <input type="range" id="f-progress" min="0" max="100" value="65" step="1" oninput="updateProgressPreview()" />
+          <span class="pct-display" id="pct-display">65%</span>
+        </div>
+        <div class="progress-preview" style="margin-top:0.75rem;">
+          <div class="progress-preview-track">
+            <div class="progress-preview-fill" id="preview-fill" style="width:65%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Progress note (shown under the bar)</label>
+        <input type="text" id="f-note" placeholder="e.g. Roughly two thirds through — things are getting interesting." />
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="saveData()">Save &amp; update homepage</button>
+    <div id="save-status"></div>
+    <a href="index.html" class="visit-link">&#8592; Back to site</a>
+
+  </div>
+
+  <script>
+    // ── Change this password ──
+    var ADMIN_PASSWORD = 'readingclub2026';
+
+    function tryLogin() {
+      var val = document.getElementById('password-input').value;
+      if (val === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display  = 'block';
+        loadFields();
+      } else {
+        document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+        document.getElementById('password-input').value = '';
+      }
+    }
+
+    document.getElementById('password-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') tryLogin();
+    });
+
+    function logout() {
+      document.getElementById('admin-panel').style.display  = 'none';
+      document.getElementById('login-screen').style.display = 'block';
+      document.getElementById('password-input').value = '';
+      document.getElementById('login-error').textContent = '';
+    }
+
+    function loadFields() {
+      var raw = localStorage.getItem('rs_book_data');
+      if (!raw) return;
+      try {
+        var d = JSON.parse(raw);
+        if (d.title)    document.getElementById('f-title').value    = d.title;
+        if (d.author)   document.getElementById('f-author').value   = d.author;
+        if (d.meeting)  document.getElementById('f-meeting').value  = d.meeting;
+        if (d.note)     document.getElementById('f-note').value     = d.note;
+        if (d.googleBooksId) document.getElementById('f-gbid').value = d.googleBooksId;
+        if (d.progress !== undefined) {
+          document.getElementById('f-progress').value = d.progress;
+          updateProgressPreview();
+        }
+      } catch(e) {}
+    }
+
+    function updateProgressPreview() {
+      var val = document.getElementById('f-progress').value;
+      document.getElementById('pct-display').textContent      = val + '%';
+      document.getElementById('preview-fill').style.width     = val + '%';
+    }
+
+    function saveData() {
+      var data = {
+        title:    document.getElementById('f-title').value.trim()   || 'The Midnight Library',
+        author:   document.getElementById('f-author').value.trim()  || 'Matt Haig',
+        meeting:  document.getElementById('f-meeting').value.trim() || 'May 24th',
+        progress: parseInt(document.getElementById('f-progress').value, 10),
+        note:     document.getElementById('f-note').value.trim()    || '',
+        googleBooksId: document.getElementById('f-gbid').value.trim()
+      };
+
+      localStorage.setItem('rs_book_data', JSON.stringify(data));
+
+      var status = document.getElementById('save-status');
+      status.textContent = '&#10003; Saved! Homepage will reflect your changes.';
+      setTimeout(function() { status.textContent = ''; }, 3500);
+    }
+  </script>
+
+</body>
+</html>

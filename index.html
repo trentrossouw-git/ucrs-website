@@ -50,13 +50,23 @@
       </div>
     </div>
     <div class="hero-book">
-      <div class="book-cover">
-        <div class="book-cover-inner">
-          <p class="cover-label">Currently reading</p>
-          <h2 id="hero-book-title">The Midnight Library</h2>
-          <p class="cover-author" id="hero-book-author">Matt Haig</p>
-          <div class="cover-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="book-cover-wrap">
+        <p class="cover-eyebrow">Currently reading</p>
+        <div class="book-img-frame">
+          <img
+            id="hero-cover-img"
+            src="https://books.google.com/books/content?id=O6H3DwAAQBAJ&printsec=frontcover&img=1&zoom=2"
+            alt="Book cover"
+            class="book-img"
+            onerror="this.style.display='none';document.getElementById('book-img-fallback').style.display='flex'"
+          />
+          <div id="book-img-fallback" class="book-img-fallback" style="display:none">
+            <span id="hero-book-title-fb">The Midnight Library</span>
+            <span id="hero-book-author-fb">Matt Haig</span>
+          </div>
         </div>
+        <h2 id="hero-book-title" class="cover-title-below">The Midnight Library</h2>
+        <p id="hero-book-author" class="cover-author-below">Matt Haig</p>
       </div>
 
       <div class="progress-card">
@@ -81,8 +91,25 @@
       if (!data) return;
       try {
         var d = JSON.parse(data);
-        if (d.title)    document.getElementById('hero-book-title').textContent  = d.title;
-        if (d.author)   document.getElementById('hero-book-author').textContent = d.author;
+        if (d.title) {
+          document.getElementById('hero-book-title').textContent = d.title;
+          var fb = document.getElementById('hero-book-title-fb');
+          if (fb) fb.textContent = d.title;
+        }
+        if (d.author) {
+          document.getElementById('hero-book-author').textContent = d.author;
+          var fba = document.getElementById('hero-book-author-fb');
+          if (fba) fba.textContent = d.author;
+        }
+        if (d.googleBooksId) {
+          var img = document.getElementById('hero-cover-img');
+          if (img) {
+            img.src = 'https://books.google.com/books/content?id=' + d.googleBooksId + '&printsec=frontcover&img=1&zoom=2';
+            img.style.display = '';
+            var fb2 = document.getElementById('book-img-fallback');
+            if (fb2) fb2.style.display = 'none';
+          }
+        }
         if (d.meeting)  document.getElementById('hero-meeting').textContent     = 'Next meeting: ' + d.meeting;
         if (d.progress !== undefined) {
           var pct = Math.min(100, Math.max(0, d.progress));

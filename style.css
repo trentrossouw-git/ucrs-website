@@ -67,7 +67,7 @@ nav {
   justify-content: space-between;
   padding: 0 2.5rem;
   height: auto;
-  min-height: 68px;
+  min-height: 128px;
   padding-top: 8px;
   padding-bottom: 8px;
   background: var(--cream);

@@ -299,8 +299,7 @@
 
   <!-- Login -->
   <div id="login-screen">
-    <span class="logo-word">the</span>
-    <span class="logo-main">Readers Society</span>
+    <img src="readinglogo.png" alt="The Readers Society" style="height:100px;width:auto;object-fit:contain;margin-bottom:0.75rem;" />
     <span class="admin-tag">Admin panel</span>
 
     <input type="password" id="password-input" placeholder="Enter password" />
@@ -320,44 +319,6 @@
         <span class="admin-tag">Admin</span>
         <button class="logout-btn" onclick="logout()">Sign out</button>
       </div>
-    </div>
-
-    <div class="panel">
-      <h2>&#128444; Logo</h2>
-
-      <div id="logo-current" style="margin-bottom:1rem;display:none;">
-        <p style="font-size:12px;color:var(--ink-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-weight:500;">Current logo</p>
-        <div style="background:var(--ink);display:inline-flex;padding:10px 16px;border-radius:8px;align-items:center;gap:12px;">
-          <img id="logo-preview-img" src="" id="logo-preview-img" style="height:48px;width:auto;object-fit:contain;" />
-          <button onclick="removeLogo()" style="background:none;border:1px solid rgba(253,248,242,0.3);color:rgba(253,248,242,0.7);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">Remove</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Upload logo image</label>
-        <input type="file" id="f-logo" accept="image/*" onchange="previewLogo(event)" style="padding:8px;" />
-        <small style="display:block;font-size:12px;color:#8a7060;margin-top:6px;">PNG with transparent background works best on the dark navbar.</small>
-      </div>
-
-      <div class="form-group">
-        <label>Logo size — <span id="size-display">48</span>px</label>
-        <input type="range" id="f-logo-size" min="24" max="200" value="48" step="2"
-          oninput="previewLogoSize()"
-          style="width:100%;accent-color:var(--ink);" />
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-muted);margin-top:4px;">
-          <span>Small</span><span>Large</span>
-        </div>
-      </div>
-
-      <div id="logo-new-preview" style="display:none;margin-top:0.5rem;">
-        <p style="font-size:12px;color:var(--ink-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-weight:500;">Preview on dark nav</p>
-        <div style="background:var(--ink);display:inline-flex;padding:10px 16px;border-radius:8px;">
-          <img id="logo-new-img" src="" id="logo-preview-img" style="height:48px;width:auto;object-fit:contain;" />
-        </div>
-      </div>
-
-      <button onclick="saveLogo()" class="save-btn" style="margin-top:1rem;">Save logo</button>
-      <div id="logo-save-status" style="text-align:center;font-size:13px;margin-top:0.5rem;min-height:18px;color:var(--green);font-weight:500;"></div>
     </div>
 
     <div class="panel">
@@ -436,7 +397,6 @@
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display  = 'block';
         loadFromBin();
-        loadLogo();
       } else {
         document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
         document.getElementById('password-input').value = '';
@@ -478,75 +438,20 @@
       document.getElementById('preview-fill').style.width     = val + '%';
     }
 
-    function loadLogo() {
-      var stored = localStorage.getItem('rs_logo');
-      var size   = localStorage.getItem('rs_logo_size') || '48';
-      document.getElementById('f-logo-size').value = size;
-      document.getElementById('size-display').textContent = size;
-      if (!stored) return;
-      var cur = document.getElementById('logo-current');
-      var img = document.getElementById('logo-preview-img');
-      img.style.height = size + 'px';
-      cur.style.display = 'block';
-      img.src = stored;
-    }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        var existing = (res && res.record) ? res.record : {};
+        delete existing.logo;
+        delete existing.logoSize;
+        return fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+          body: JSON.stringify(existing)
+        });
+      })
+      .catch(function() {});
 
-    function previewLogoSize() {
-      var val = document.getElementById('f-logo-size').value;
-      document.getElementById('size-display').textContent = val;
-      var prev = document.getElementById('logo-preview-img');
-      var newPrev = document.getElementById('logo-new-img');
-      if (prev) prev.style.height = val + 'px';
-      if (newPrev) newPrev.style.height = val + 'px';
-    }
-
-    function previewLogo(e) {
-      var file = e.target.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function(ev) {
-        var wrap = document.getElementById('logo-new-preview');
-        var img  = document.getElementById('logo-new-img');
-        img.src = ev.target.result;
-        wrap.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function saveLogo() {
-      var file = document.getElementById('f-logo').files[0];
-      if (!file) {
-        var st = document.getElementById('logo-save-status');
-        st.style.color = 'var(--red)';
-        st.textContent = 'Please choose an image first.';
-        setTimeout(function() { st.textContent = ''; }, 3000);
-        return;
-      }
-      var reader = new FileReader();
-      reader.onload = function(ev) {
-        localStorage.setItem('rs_logo', ev.target.result);
-        localStorage.setItem('rs_logo_size', document.getElementById('f-logo-size').value);
-        var cur = document.getElementById('logo-current');
-        var img = document.getElementById('logo-preview-img');
-        img.src = ev.target.result;
-        cur.style.display = 'block';
-        var st = document.getElementById('logo-save-status');
-        st.style.color = 'var(--green)';
-        st.textContent = '✓ Logo saved! It will appear in the navbar across all pages.';
-        setTimeout(function() { st.textContent = ''; }, 4000);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function removeLogo() {
-      localStorage.removeItem('rs_logo');
-      document.getElementById('logo-current').style.display = 'none';
-      document.getElementById('logo-preview-img').src = '';
-      document.getElementById('logo-new-preview').style.display = 'none';
-      document.getElementById('f-logo').value = '';
-      document.getElementById('f-logo-size').value = '48';
-      document.getElementById('size-display').textContent = '48';
-      localStorage.removeItem('rs_logo_size');
       var st = document.getElementById('logo-save-status');
       st.style.color = 'var(--ink-muted)';
       st.textContent = 'Logo removed. Text logo restored.';
@@ -565,7 +470,9 @@
       var prevTitle  = document.getElementById('preview-title');
       var prevAuthor = document.getElementById('preview-author');
 
+      prevCover.style.opacity = '0';
       prevCover.src          = 'https://books.google.com/books/content?id=' + id + '&printsec=frontcover&img=1&zoom=2';
+      prevCover.onload       = function() { prevCover.style.transition = 'opacity 0.3s'; prevCover.style.opacity = '1'; };
       prevTitle.textContent  = title;
       prevAuthor.textContent = author;
       preview.style.display  = 'flex';
@@ -612,7 +519,9 @@
                 // Last resort: just use the ID for the cover, ask user to fill in details
                 var preview    = document.getElementById('book-preview');
                 var prevCover  = document.getElementById('preview-cover');
+                prevCover.style.opacity = '0';
                 prevCover.src  = 'https://books.google.com/books/content?id=' + id + '&printsec=frontcover&img=1&zoom=2';
+                prevCover.onload = function() { prevCover.style.transition = 'opacity 0.3s'; prevCover.style.opacity = '1'; };
                 preview.style.display = 'flex';
                 setLookupStatus('Cover loaded — please fill in title and author manually.', 'warn');
               }

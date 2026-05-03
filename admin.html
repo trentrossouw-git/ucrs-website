@@ -437,25 +437,6 @@
       document.getElementById('preview-fill').style.width     = val + '%';
     }
 
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(res) {
-        var existing = (res && res.record) ? res.record : {};
-        delete existing.logo;
-        delete existing.logoSize;
-        return fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-          body: JSON.stringify(existing)
-        });
-      })
-      .catch(function() {});
-
-      var st = document.getElementById('logo-save-status');
-      st.style.color = 'var(--ink-muted)';
-      st.textContent = 'Logo removed. Text logo restored.';
-      setTimeout(function() { st.textContent = ''; }, 3000);
-    }
 
     function applyBookData(id, info) {
       var title  = info.title || '';

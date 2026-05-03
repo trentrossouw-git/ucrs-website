@@ -553,6 +553,26 @@
       setTimeout(function() { st.textContent = ''; }, 3000);
     }
 
+    function applyBookData(id, info) {
+      var title  = info.title || '';
+      var author = info.authors ? info.authors.join(', ') : '';
+
+      document.getElementById('f-title').value  = title;
+      document.getElementById('f-author').value = author;
+
+      var preview    = document.getElementById('book-preview');
+      var prevCover  = document.getElementById('preview-cover');
+      var prevTitle  = document.getElementById('preview-title');
+      var prevAuthor = document.getElementById('preview-author');
+
+      prevCover.src          = 'https://books.google.com/books/content?id=' + id + '&printsec=frontcover&img=1&zoom=2';
+      prevTitle.textContent  = title;
+      prevAuthor.textContent = author;
+      preview.style.display  = 'flex';
+
+      setLookupStatus('\u2713 Found! Title and author filled in.', 'ok');
+    }
+
     function lookupBook() {
       var id = document.getElementById('f-gbid').value.trim();
       if (!id) {
@@ -564,48 +584,54 @@
       btn.disabled = true;
       setLookupStatus('', '');
 
+      // Try direct volume lookup first
       fetch('https://www.googleapis.com/books/v1/volumes/' + id)
-        .then(function(r) { return r.json(); })
+        .then(function(r) {
+          if (!r.ok) throw new Error('not_found');
+          return r.json();
+        })
         .then(function(data) {
-          btn.textContent = 'Look up →';
+          btn.textContent = 'Look up \u2192';
           btn.disabled = false;
-
-          if (!data || !data.volumeInfo) {
-            setLookupStatus('Book not found. Check the ID and try again.', 'error');
-            return;
+          if (data && data.volumeInfo) {
+            applyBookData(id, data.volumeInfo);
+          } else {
+            throw new Error('no_info');
           }
-
-          var info   = data.volumeInfo;
-          var title  = info.title || '';
-          var author = info.authors ? info.authors.join(', ') : '';
-          var imgId  = id;
-
-          document.getElementById('f-title').value  = title;
-          document.getElementById('f-author').value = author;
-
-          var preview     = document.getElementById('book-preview');
-          var prevCover   = document.getElementById('preview-cover');
-          var prevTitle   = document.getElementById('preview-title');
-          var prevAuthor  = document.getElementById('preview-author');
-
-          prevCover.src       = 'https://books.google.com/books/content?id=' + imgId + '&printsec=frontcover&img=1&zoom=2';
-          prevTitle.textContent  = title;
-          prevAuthor.textContent = author;
-          preview.style.display  = 'flex';
-
-          setLookupStatus('✓ Found! Title and author filled in.', 'ok');
         })
         .catch(function() {
-          btn.textContent = 'Look up →';
-          btn.disabled = false;
-          setLookupStatus('Could not reach Google Books. Check your connection.', 'error');
+          // Fallback: search by the ID as a query
+          fetch('https://www.googleapis.com/books/v1/volumes?q=id:' + id + '&maxResults=1')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              btn.textContent = 'Look up \u2192';
+              btn.disabled = false;
+              if (data && data.items && data.items.length > 0 && data.items[0].volumeInfo) {
+                applyBookData(id, data.items[0].volumeInfo);
+              } else {
+                // Last resort: just use the ID for the cover, ask user to fill in details
+                var preview    = document.getElementById('book-preview');
+                var prevCover  = document.getElementById('preview-cover');
+                prevCover.src  = 'https://books.google.com/books/content?id=' + id + '&printsec=frontcover&img=1&zoom=2';
+                preview.style.display = 'flex';
+                setLookupStatus('Cover loaded — please fill in title and author manually.', 'warn');
+              }
+            })
+            .catch(function() {
+              btn.textContent = 'Look up \u2192';
+              btn.disabled = false;
+              setLookupStatus('Could not reach Google Books. Check your connection.', 'error');
+            });
         });
     }
 
     function setLookupStatus(msg, type) {
       var el = document.getElementById('lookup-status');
       el.textContent = msg;
-      el.style.color = type === 'error' ? 'var(--red)' : type === 'ok' ? 'var(--green)' : 'var(--ink-muted)';
+      el.style.color = type === 'error' ? 'var(--red)'
+                     : type === 'ok'    ? 'var(--green)'
+                     : type === 'warn'  ? '#a0673a'
+                     : 'var(--ink-muted)';
     }
 
     var BIN_ID  = '69f69d14856a6821899cf165';

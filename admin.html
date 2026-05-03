@@ -299,7 +299,7 @@
 
   <!-- Login -->
   <div id="login-screen">
-    <img src="readinglogo.png" alt="The Readers Society" style="height:100px;width:auto;object-fit:contain;margin-bottom:0.75rem;" />
+    <img src="readinglogo.png" alt="The Readers Society" style="height:100px;width:auto;object-fit:contain;display:block;margin:0 auto 0.75rem;" />
     <span class="admin-tag">Admin panel</span>
 
     <input type="password" id="password-input" placeholder="Enter password" />
@@ -414,8 +414,7 @@
       document.getElementById('login-error').textContent = '';
     }
 
-    function loadFields() { // legacy - replaced by loadFromBin
-    function _loadFields() {
+    function loadFields() {
       var raw = localStorage.getItem('rs_book_data');
       if (!raw) return;
       try {

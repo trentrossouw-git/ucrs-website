@@ -435,7 +435,7 @@
       if (val === ADMIN_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display  = 'block';
-        loadFields();
+        loadFromBin();
         loadLogo();
       } else {
         document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
@@ -454,7 +454,8 @@
       document.getElementById('login-error').textContent = '';
     }
 
-    function loadFields() {
+    function loadFields() { // legacy - replaced by loadFromBin
+    function _loadFields() {
       var raw = localStorage.getItem('rs_book_data');
       if (!raw) return;
       try {
@@ -607,21 +608,82 @@
       el.style.color = type === 'error' ? 'var(--red)' : type === 'ok' ? 'var(--green)' : 'var(--ink-muted)';
     }
 
+    var BIN_ID  = '69f69d14856a6821899cf165';
+    var API_KEY = '$2a$10$7q3BXMJS3T97UFpTh1iskOyAWNepdku10jdKh/a9niCX4iCsLAPGm';
+
+    function loadFromBin() {
+      fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', {
+        headers: { 'X-Master-Key': API_KEY }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (!res.record) return;
+        var d = res.record;
+        if (d.title)         document.getElementById('f-title').value    = d.title;
+        if (d.author)        document.getElementById('f-author').value   = d.author;
+        if (d.meeting)       document.getElementById('f-meeting').value  = d.meeting;
+        if (d.note)          document.getElementById('f-note').value     = d.note;
+        if (d.googleBooksId) document.getElementById('f-gbid').value     = d.googleBooksId;
+        if (d.progress !== undefined) {
+          document.getElementById('f-progress').value = d.progress;
+          updateProgressPreview();
+        }
+      })
+      .catch(function() {
+        // Fallback to localStorage if bin unreachable
+        var cached = localStorage.getItem('rs_book_data');
+        if (cached) {
+          try {
+            var d = JSON.parse(cached);
+            if (d.title)         document.getElementById('f-title').value    = d.title;
+            if (d.author)        document.getElementById('f-author').value   = d.author;
+            if (d.meeting)       document.getElementById('f-meeting').value  = d.meeting;
+            if (d.note)          document.getElementById('f-note').value     = d.note;
+            if (d.googleBooksId) document.getElementById('f-gbid').value     = d.googleBooksId;
+            if (d.progress !== undefined) {
+              document.getElementById('f-progress').value = d.progress;
+              updateProgressPreview();
+            }
+          } catch(e) {}
+        }
+      });
+    }
+
     function saveData() {
       var data = {
-        title:    document.getElementById('f-title').value.trim()   || 'The Midnight Library',
-        author:   document.getElementById('f-author').value.trim()  || 'Matt Haig',
-        meeting:  document.getElementById('f-meeting').value.trim() || 'May 24th',
-        progress: parseInt(document.getElementById('f-progress').value, 10),
-        note:     document.getElementById('f-note').value.trim()    || '',
+        title:         document.getElementById('f-title').value.trim()   || 'The Midnight Library',
+        author:        document.getElementById('f-author').value.trim()  || 'Matt Haig',
+        meeting:       document.getElementById('f-meeting').value.trim() || 'May 24th',
+        progress:      parseInt(document.getElementById('f-progress').value, 10),
+        note:          document.getElementById('f-note').value.trim()    || '',
         googleBooksId: document.getElementById('f-gbid').value.trim()
       };
 
-      localStorage.setItem('rs_book_data', JSON.stringify(data));
-
       var status = document.getElementById('save-status');
-      status.textContent = '&#10003; Saved! Homepage will reflect your changes.';
-      setTimeout(function() { status.textContent = ''; }, 3500);
+      status.style.color = 'var(--ink-muted)';
+      status.textContent = 'Saving...';
+
+      fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify(data)
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        // Also cache locally as fallback
+        localStorage.setItem('rs_book_data', JSON.stringify(data));
+        status.style.color = 'var(--green)';
+        status.textContent = '\u2713 Saved! All visitors will now see the updated homepage.';
+        setTimeout(function() { status.textContent = ''; }, 4000);
+      })
+      .catch(function() {
+        status.style.color = 'var(--red)';
+        status.textContent = 'Could not reach JSONBin. Check your connection.';
+        setTimeout(function() { status.textContent = ''; }, 4000);
+      });
     }
   </script>
 

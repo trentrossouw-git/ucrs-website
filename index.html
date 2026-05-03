@@ -103,10 +103,7 @@
         }
       }
 
-      var data = localStorage.getItem('rs_book_data');
-      if (!data) return;
-      try {
-        var d = JSON.parse(data);
+      function applyData(d) {
         if (d.title) {
           document.getElementById('hero-book-title').textContent = d.title;
           var fb = document.getElementById('hero-book-title-fb');
@@ -118,22 +115,34 @@
           if (fba) fba.textContent = d.author;
         }
         if (d.googleBooksId) {
-          var img = document.getElementById('hero-cover-img');
-          if (img) {
-            img.src = 'https://books.google.com/books/content?id=' + d.googleBooksId + '&printsec=frontcover&img=1&zoom=2';
-            img.style.display = '';
+          var coverImg = document.getElementById('hero-cover-img');
+          if (coverImg) {
+            coverImg.src = 'https://books.google.com/books/content?id=' + d.googleBooksId + '&printsec=frontcover&img=1&zoom=2';
+            coverImg.style.display = '';
             var fb2 = document.getElementById('book-img-fallback');
             if (fb2) fb2.style.display = 'none';
           }
         }
-        if (d.meeting)  document.getElementById('hero-meeting').textContent     = 'Next meeting: ' + d.meeting;
+        if (d.meeting) document.getElementById('hero-meeting').textContent = 'Next meeting: ' + d.meeting;
         if (d.progress !== undefined) {
           var pct = Math.min(100, Math.max(0, d.progress));
-          document.getElementById('progress-pct').textContent    = pct + '%';
-          document.getElementById('progress-fill').style.width   = pct + '%';
+          document.getElementById('progress-pct').textContent  = pct + '%';
+          document.getElementById('progress-fill').style.width = pct + '%';
         }
         if (d.note) document.getElementById('progress-sub').textContent = d.note;
-      } catch(e) {}
+      }
+
+      // Fetch live from JSONBin — visible to all visitors
+      fetch('https://api.jsonbin.io/v3/b/69f69d14856a6821899cf165/latest', {
+        headers: { 'X-Master-Key': '$2a$10$7q3BXMJS3T97UFpTh1iskOyAWNepdku10jdKh/a9niCX4iCsLAPGm' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data && data.record) applyData(data.record); })
+      .catch(function() {
+        // Offline fallback to localStorage
+        var cached = localStorage.getItem('rs_book_data');
+        if (cached) { try { applyData(JSON.parse(cached)); } catch(e) {} }
+      });
     })();
   </script>
 
